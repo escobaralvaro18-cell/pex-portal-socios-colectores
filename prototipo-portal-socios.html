@@ -684,8 +684,22 @@ td.num,th.num{text-align:right}
       <!-- ========== LINKS DE PAGO ========== -->
       <section id="page-links" hidden>
         <div class="page-head">
-          <div><h2>Links de pago</h2><p class="pagesub" style="margin-top:4px">Genera un link de pago con QR y compárteselo a tu cliente para cobrar una factura o deuda.</p></div>
+          <div><h2>Links de pago</h2><p class="pagesub" style="margin-top:4px">Genera un link de pago y compárteselo a tu cliente para cobrar una factura o deuda.</p></div>
           <button class="btn btn-primary" id="btn-newlink" onclick="openNewLink()"><svg class="ic ic-sm"><use href="#i-plus"/></svg>Nuevo link</button>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-b" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+            <div id="emp-qr" style="width:118px;height:118px;border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none;background:#fff"></div>
+            <div style="flex:1;min-width:220px">
+              <h3 style="font-size:15px;font-weight:700">QR de la empresa</h3>
+              <p class="hint" style="margin-top:4px;max-width:54ch">Tu QR fijo de cobro. El cliente lo escanea y paga a tu cuenta. Descárgalo para imprimirlo en tu local o compartirlo.</p>
+              <p class="tabnum" id="emp-link" style="font-size:12.5px;color:var(--muted);margin-top:8px"></p>
+              <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+                <button class="btn btn-primary" onclick="downloadEmpQR()"><svg class="ic ic-sm"><use href="#i-down"/></svg>Descargar QR</button>
+                <button class="btn btn-ghost" onclick="copyEmpLink()"><svg class="ic ic-sm"><use href="#i-copy"/></svg>Copiar link</button>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="tiles3">
           <div class="tile"><p class="t-l" id="lk-scope">Cobrado con links (equipo, 30 días)</p><p class="t-v tabnum" id="lk-cobrado">$0.00</p></div>
@@ -792,8 +806,10 @@ td.num,th.num{text-align:right}
         </div>
       </div>
       <div id="nl-done" hidden style="text-align:center;padding:6px 0 4px">
-        <div style="width:52px;height:52px;border-radius:99px;background:var(--good-bg);color:var(--good-tx);display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg class="ic" style="width:24px;height:24px"><use href="#i-check"/></svg></div>
-        <h3 style="font-size:16px;font-weight:700">¡El link de pago ha sido generado!</h3>
+        <div id="nl-done-head">
+          <div style="width:52px;height:52px;border-radius:99px;background:var(--good-bg);color:var(--good-tx);display:flex;align-items:center;justify-content:center;margin:0 auto 10px"><svg class="ic" style="width:24px;height:24px"><use href="#i-check"/></svg></div>
+          <h3 style="font-size:16px;font-weight:700">¡El link de pago ha sido generado!</h3>
+        </div>
         <div class="dgroup" style="text-align:left;margin:14px 0">
           <div class="drow"><span class="dl">Referencia</span><span class="dv tabnum" id="dn-ref"></span></div>
           <div class="drow"><span class="dl">Servicio</span><span class="dv" id="dn-serv"></span></div>
@@ -802,8 +818,7 @@ td.num,th.num{text-align:right}
           <div class="drow"><span class="dl">Monto</span><span class="dv tabnum" id="dn-mon"></span></div>
         </div>
         <code id="link-url" style="font-size:14px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-weight:650;display:inline-block">pex.sv/p/8K2F</code>
-        <div id="qr-box" style="display:flex;justify-content:center;margin:16px 0 4px"></div>
-        <div style="display:flex;gap:10px;justify-content:center;margin-top:8px">
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:14px">
           <button class="copybtn" style="padding:9px 14px" onclick="copyLink()"><svg class="ic ic-sm"><use href="#i-copy"/></svg>Copiar link</button>
         </div>
       </div>
@@ -816,6 +831,13 @@ td.num,th.num{text-align:right}
     <div class="modal-h"><h3 id="dt-title">Detalle de transacción</h3><button class="iconbtn" aria-label="Cerrar" onclick="closeDetail()"><svg class="ic ic-sm"><use href="#i-x"/></svg></button></div>
     <div class="modal-b" id="dt-body"></div>
     <div class="modal-f"><button class="btn btn-ghost" onclick="closeDetail()">Cerrar</button></div>
+  </div>
+</div>
+<div class="modal-ov" id="cf-ov" hidden onclick="if(event.target===this)closeConfirm()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cf-title" style="width:min(400px,100%)">
+    <div class="modal-h"><h3 id="cf-title">Eliminar link</h3><button class="iconbtn" aria-label="Cerrar" onclick="closeConfirm()"><svg class="ic ic-sm"><use href="#i-x"/></svg></button></div>
+    <div class="modal-b" style="padding:16px 20px"><p style="font-size:14px;color:var(--ink-2);line-height:1.5" id="cf-msg">¿Seguro que quieres eliminar este link? El cliente ya no podrá pagar con él.</p></div>
+    <div class="modal-f"><button class="btn btn-ghost" onclick="closeConfirm()">Cancelar</button><button class="btn" id="cf-ok" style="margin-left:10px;background:var(--bad-tx);color:#fff">Eliminar</button></div>
   </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"><svg class="ic ic-sm"><use href="#i-check"/></svg><span id="toast-msg"></span></div>
@@ -1039,7 +1061,7 @@ document.addEventListener('click',e=>{
   if(!e.target.closest('.cbx')){const c=$('#cbx-pop');if(c)c.hidden=true}
   if(!e.target.closest('.side-user')&&!e.target.closest('.acct-pop')){const a=$('#acct-pop');if(a)a.hidden=true}
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAllPops();closeNav();closeDetail();closeNewLink()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAllPops();closeNav();closeDetail();closeNewLink();closeConfirm()}});
 $$('#range-pop .opt').forEach(b=>b.addEventListener('click',e=>{
   e.stopPropagation();
   if(b.dataset.range==='custom'){$('#range-custom').classList.toggle('open');return}
@@ -1241,13 +1263,14 @@ function renderLinks(){
     ${sup?`<td data-l="Generado por">${l.by===CURRENT_USER?'Tú ('+l.by+')':l.by}</td>`:''}
     <td data-l="" style="white-space:nowrap">
       <button class="copybtn" title="Copiar link" aria-label="Copiar link" onclick="navigator.clipboard?.writeText('https://pex.sv/p/${l.code}').catch(()=>{});toast('Link copiado: pex.sv/p/${l.code}')"><svg class="ic ic-sm"><use href="#i-copy"/></svg></button>
-      <button class="copybtn" title="Ver QR" aria-label="Ver QR" onclick="showLinkQR('${l.code}')"><svg class="ic ic-sm"><use href="#i-qr"/></svg></button>
+      <button class="copybtn" title="Ver detalle" aria-label="Ver detalle" onclick="showLinkDetail('${l.code}')"><svg class="ic ic-sm"><use href="#i-eye"/></svg></button>
       <button class="copybtn" title="Eliminar link" aria-label="Eliminar link" style="color:var(--bad-tx)" onclick="deleteLink('${l.code}')"><svg class="ic ic-sm"><use href="#i-trash"/></svg></button>
     </td></tr>`).join('');
   const cob=rows.filter(l=>l.st==='Pagado').reduce((a,l)=>a+l.monto,0);
   const pen=rows.filter(l=>l.st==='Pendiente').reduce((a,l)=>a+l.monto,0);
   $('#lk-cobrado').textContent=fmt$(cob);$('#lk-pend').textContent=fmt$(pen);
   $('#lk-act').textContent=rows.filter(l=>l.st==='Pendiente').length;
+  renderEmpQR();
 }
 function fillServOptions(){$('#nl-serv').innerHTML=ACCOUNT.services.map(s=>`<option>${s.name}</option>`).join('')}
 function nlReset(){$('#nl-step2').hidden=true;$('#nl-loading').hidden=true;$('#nl-ref').value='';$('#nl-msg').value='';$('#nl-exp').value='';
@@ -1295,9 +1318,6 @@ function fillDone(l){
   $('#dn-ref').textContent=l.ref;$('#dn-serv').textContent=l.serv;$('#dn-cli').textContent=l.cli;
   $('#dn-exp').textContent=l.exp||'Sin expiración';$('#dn-mon').textContent=fmt$(l.monto);
   $('#link-url').textContent='pex.sv/p/'+l.code;
-  const qr=qrcode(0,'M');qr.addData('https://pex.sv/p/'+l.code);qr.make();
-  $('#qr-box').innerHTML=qr.createSvgTag({cellSize:4,margin:0,scalable:true});
-  const svg=$('#qr-box svg');svg.style.width='132px';svg.style.height='132px';
 }
 function createLink(){
   const mon=parseFloat($('#nl-mon').value);
@@ -1308,21 +1328,49 @@ function createLink(){
   const l={creado:'25 jul, ahora',serv:$('#nl-serv').value,ref:$('#nl-ref').value.trim(),cli:$('#nl-cli-name').textContent,monto:mon,exp:fmtExp($('#nl-exp').value),st:'Pendiente',by:CURRENT_USER,code};
   LINKS.unshift(l);renderLinks();fillDone(l);
   $('#nl-title').textContent='Nuevo link de pago';
+  $('#nl-done-head').hidden=false;
   $('#nl-form').hidden=true;$('#nl-done').hidden=false;
   setStep(3);nlFooter(3);
 }
-function showLinkQR(code){
+function showLinkDetail(code){
   const l=LINKS.find(x=>x.code===code);if(!l)return;
   fillDone(l);
-  $('#nl-title').textContent='Link de pago';
+  $('#nl-title').textContent='Detalle del link';
+  $('#nl-done-head').hidden=true;
   $('#nl-form').hidden=true;$('#nl-done').hidden=false;$('#nl-ov').hidden=false;
   $('#nl-foot').innerHTML='<button class="btn btn-primary" onclick="closeNewLink()">Cerrar</button>';
 }
+let _delCode=null;
 function deleteLink(code){
-  const i=LINKS.findIndex(x=>x.code===code);if(i<0)return;
-  LINKS.splice(i,1);renderLinks();
-  toast('Link eliminado. El cliente ya no podrá pagar con él.');
+  _delCode=code;$('#cf-ov').hidden=false;
 }
+function closeConfirm(){$('#cf-ov').hidden=true;_delCode=null;}
+$('#cf-ok').addEventListener('click',()=>{
+  const i=LINKS.findIndex(x=>x.code===_delCode);
+  if(i>=0){LINKS.splice(i,1);renderLinks();toast('Link eliminado. El cliente ya no podrá pagar con él.');}
+  closeConfirm();
+});
+/* ===== QR de la empresa ===== */
+function empQrUrl(){return 'https://pex.sv/e/'+(ACCOUNT.id==='claro'?'TELECOM-SV':'EMPRESA');}
+function renderEmpQR(){
+  const box=$('#emp-qr');if(!box)return;
+  const url=empQrUrl();
+  $('#emp-link').textContent=url.replace('https://','');
+  const qr=qrcode(0,'M');qr.addData(url);qr.make();
+  box.innerHTML=qr.createSvgTag({cellSize:4,margin:0,scalable:true});
+  const svg=box.querySelector('svg');if(svg){svg.style.width='104px';svg.style.height='104px';}
+}
+function downloadEmpQR(){
+  const qr=qrcode(0,'M');qr.addData(empQrUrl());qr.make();
+  const n=qr.getModuleCount(),cell=12,margin=cell*2,size=n*cell+margin*2;
+  const c=document.createElement('canvas');c.width=size;c.height=size;
+  const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,size,size);g.fillStyle='#000';
+  for(let r=0;r<n;r++)for(let col=0;col<n;col++)if(qr.isDark(r,col))g.fillRect(margin+col*cell,margin+r*cell,cell,cell);
+  const a=document.createElement('a');a.href=c.toDataURL('image/png');
+  a.download='qr-empresa-'+(ACCOUNT.id==='claro'?'telecom-sv':'empresa')+'.png';a.click();
+  toast('QR de la empresa descargado');
+}
+function copyEmpLink(){navigator.clipboard?.writeText(empQrUrl()).catch(()=>{});toast('Link de la empresa copiado');}
 $('#nl-ref').addEventListener('keydown',e=>{if(e.key==='Enter'&&$('#nl-ref').value.trim())lookupRef()});
 $('#nl-ref').addEventListener('input',()=>{
   if(!$('#nl-step2').hidden){$('#nl-step2').hidden=true;setStep(1);nlFooter(1)}
@@ -1343,6 +1391,7 @@ function go(page){
   if(page==='dashboard'||page==='transacciones'){rw.style.display='';(page==='dashboard'?$('#dash-toolbar'):$('#range-slot-tx')).appendChild(rw)}
   else{rw.style.display='none'}
   if(page==='dashboard')requestAnimationFrame(renderChart);
+  if(page==='links')renderLinks();
 }
 $$('.navitem[data-page]').forEach(n=>n.addEventListener('click',()=>go(n.dataset.page)));
 let PROVIDERS=ACCOUNT.providers;
