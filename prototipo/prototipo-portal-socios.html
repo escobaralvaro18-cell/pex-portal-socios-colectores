@@ -432,6 +432,14 @@ td.num,th.num{text-align:right}
   .ptitle{font-size:15px}
   #help-btn{display:none}
 }
+@media(max-width:560px){
+  .modal-ov{padding:12px}
+  .modal-lg .modal-b{padding-left:16px!important;padding-right:16px!important}
+  .steps{margin-bottom:16px}
+  .step:not(.act) .slbl{display:none}
+  .step .slbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .step-sep{min-width:10px;margin:0 8px}
+}
 </style>
 </head>
 <body>
@@ -764,11 +772,11 @@ td.num,th.num{text-align:right}
     <div class="modal-b" style="padding:18px 20px">
       <div id="nl-form">
         <div class="steps">
-          <div class="step act" id="st-1"><span class="sn">1</span>Referencia</div>
+          <div class="step act" id="st-1"><span class="sn">1</span><span class="slbl">Referencia</span></div>
           <div class="step-sep"></div>
-          <div class="step" id="st-2"><span class="sn">2</span>Monto y detalle</div>
+          <div class="step" id="st-2"><span class="sn">2</span><span class="slbl">Monto y detalle</span></div>
           <div class="step-sep"></div>
-          <div class="step" id="st-3"><span class="sn">3</span>Link y QR</div>
+          <div class="step" id="st-3"><span class="sn">3</span><span class="slbl">Link y QR</span></div>
         </div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start">
           <div class="field" style="margin:0;min-width:160px;flex:1"><label>Servicio</label><div class="ctrl"><select id="nl-serv" class="f-sel" style="width:100%"></select></div></div>
