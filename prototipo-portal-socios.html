@@ -820,12 +820,14 @@ td.num,th.num{text-align:right}
 <div class="modal-ov" id="emp-ov" hidden onclick="if(event.target===this)closeEmpQR()">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="emp-title" style="width:min(400px,100%)">
     <div class="modal-h"><h3 id="emp-title">QR de la empresa</h3><button class="iconbtn" aria-label="Cerrar" onclick="closeEmpQR()"><svg class="ic ic-sm"><use href="#i-x"/></svg></button></div>
-    <div class="modal-b" style="padding:18px 20px;text-align:center">
-      <div id="emp-qr" style="width:180px;height:180px;border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto;background:#fff"></div>
-      <p class="hint" style="margin:12px auto 0;max-width:34ch">Tu QR fijo de cobro. El cliente lo escanea y paga a tu cuenta.</p>
-      <p class="tabnum" id="emp-link" style="font-size:13px;color:var(--muted);margin-top:6px"></p>
+    <div class="modal-b" style="padding:20px 22px;text-align:center">
+      <div id="emp-qr" style="width:184px;height:184px;border:1px solid var(--line);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto;background:#fff;padding:12px"></div>
+      <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin:16px auto 0;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:7px 8px 7px 14px;max-width:280px">
+        <span class="tabnum" id="emp-link" style="font-size:13px;color:var(--ink-2);flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+        <button class="copybtn" aria-label="Copiar link" title="Copiar link" onclick="copyEmpLink()"><svg class="ic ic-sm"><use href="#i-copy"/></svg></button>
+      </div>
     </div>
-    <div class="modal-f"><button class="btn btn-ghost" onclick="copyEmpLink()"><svg class="ic ic-sm"><use href="#i-copy"/></svg>Copiar link</button><button class="btn btn-primary" style="margin-left:10px" onclick="downloadEmpQR()"><svg class="ic ic-sm"><use href="#i-down"/></svg>Descargar QR</button></div>
+    <div class="modal-f"><button class="btn btn-primary btn-block" onclick="downloadEmpQR()"><svg class="ic ic-sm"><use href="#i-down"/></svg>Descargar QR</button></div>
   </div>
 </div>
 <div class="modal-ov" id="cf-ov" hidden onclick="if(event.target===this)closeConfirm()">
