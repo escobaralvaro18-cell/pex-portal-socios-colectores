@@ -346,6 +346,8 @@ td.num,th.num{text-align:right}
   .rcards td{border:0;padding:2px 0}
   .rcards td[data-l]{display:flex;align-items:center;gap:10px;text-align:left;justify-content:space-between;padding:3.5px 0}
   .rcards td[data-l]::before{content:attr(data-l);flex:none;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .rcards td[data-l=""]{justify-content:flex-start;gap:8px;margin-top:4px}
+  .rcards td[data-l=""]::before{display:none}
   .rcards td.c-main{padding:0 0 6px;font-weight:600}
   .rcards td.c-amt{position:absolute;top:12px;right:16px;font-size:16px;font-weight:750}
   .rcards td.c-amt::before{display:none}
@@ -433,13 +435,17 @@ td.num,th.num{text-align:right}
   #help-btn{display:none}
 }
 @media(max-width:560px){
-  .modal-ov{padding:12px}
+  .modal-ov{padding:0;align-items:flex-end}
+  .modal,.modal-lg{width:100%!important;max-width:none;max-height:90vh;border-radius:16px 16px 0 0;animation:sheetin .3s cubic-bezier(.16,1,.3,1)}
+  .modal::before{content:'';display:block;width:38px;height:4px;border-radius:99px;background:var(--line);margin:9px auto 1px}
+  .modal-h{padding-top:8px}
   .modal-lg .modal-b{padding-left:16px!important;padding-right:16px!important}
   .steps{margin-bottom:16px}
   .step:not(.act) .slbl{display:none}
   .step .slbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .step-sep{min-width:10px;margin:0 8px}
 }
+@keyframes sheetin{from{transform:translateY(100%)}to{transform:translateY(0)}}
 </style>
 </head>
 <body>
